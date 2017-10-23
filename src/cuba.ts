@@ -53,6 +53,9 @@ export interface ResponseError extends Error {
 
 export type ContentType = "text" | "json" | "blob";
 
+/*
+ * Temporary typings until AbortSignal gets landed to the TypeScript library
+ */
 export interface AbortSignal extends EventTarget {
   aborted: boolean;
 }
