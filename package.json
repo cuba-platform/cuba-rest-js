@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "browserify": "^16.2.3",
+    "chai": "^4.2.0",
     "mocha": "~5.0.5",
     "node-fetch": "^2.6.0",
     "nyc": "~14.1.1",
@@ -33,6 +34,13 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "nyc": {
+    "check-coverage": true,
+    "statements": 80,
+    "branches": 76,
+    "functions": 69,
+    "lines": 83
   },
   "author": "Vlad Minaev <minaev@haulmont.com>",
   "license": "Apache-2.0",
