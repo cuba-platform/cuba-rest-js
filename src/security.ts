@@ -73,48 +73,43 @@ export function isOperationAllowed(entityName: string,
   return perm == null || perm.value as BasePermissionValue !== 'DENY' ? true : false;
 }
 
-export function getMaxAllowedOpPerm(entityName: string,
-                                    operation: EntityOperationType,
-                                    perms: PermissionInfo[]): PermissionInfo | null {
+function getMaxAllowedOpPerm(entityName: string,
+                             operation: EntityOperationType,
+                             perms: PermissionInfo[]): PermissionInfo | null {
 
   const opFqn = `${entityName}:${operation}`;
-  let resultPerm = null;
 
-  perms
+  return perms
     .filter(perm => perm.type === PermissionType.ENTITY_OP && perm.target === opFqn)
-    .forEach(perm => {
-      // assign result perm to maximum allowed permission between current and resultPerm
-      if (resultPerm == null) resultPerm = perm;
-      if (perm.value as BasePermissionValue === 'ALLOW') resultPerm = perm;
-    });
-
-  return resultPerm;
+    .reduce((resultPerm, perm) => {
+        // assign result perm to maximum allowed permission between current and resultPerm
+        if (resultPerm == null) return perm;
+        if (perm.value as BasePermissionValue === 'ALLOW') return perm;
+        return resultPerm;
+    }, null);
 }
 
-export function getMaxAllowedAttrPerm(entityName: string,
-                                      attributeName: string,
-                                      perms: PermissionInfo[]): PermissionInfo | null {
+function getMaxAllowedAttrPerm(entityName: string,
+                               attributeName: string,
+                               perms: PermissionInfo[]): PermissionInfo | null {
 
   const attrFqn = `${entityName}:${attributeName}`;
-  let resultPerm = null;
 
-  perms
+  return perms
     .filter(perm => perm.type === PermissionType.ENTITY_ATTR && perm.target === attrFqn)
-    .forEach(perm => {
-      if (resultPerm === null) {
-        resultPerm = perm;
+    .reduce((resultPerm, perm) => {
+
+      if (resultPerm === null) return perm;
 
       // assign result perm to maximum allowed permission between current and resultPerm
-      } else {
-        const resultPermValue: EntityAttrPermissionValue = resultPerm.value as EntityAttrPermissionValue;
-        const currentPermValue: EntityAttrPermissionValue = perm.value as EntityAttrPermissionValue;
+      const resultPermValue: EntityAttrPermissionValue = resultPerm.value as EntityAttrPermissionValue;
+      const currentPermValue: EntityAttrPermissionValue = perm.value as EntityAttrPermissionValue;
 
-        if (currentPermValue === 'MODIFY') resultPerm = perm;
-        if (currentPermValue === 'VIEW' && resultPermValue === 'DENY') resultPerm = perm;
-      }
-  });
+      if (currentPermValue === 'MODIFY') return perm;
+      if (currentPermValue === 'VIEW' && resultPermValue === 'DENY') return perm;
+      return resultPerm;
 
-  return resultPerm;
+    }, null);
 }
 
 function hasRole(roles: RoleInfo[], roleType: RoleType): boolean {

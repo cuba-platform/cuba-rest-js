@@ -20,5 +20,3 @@ export declare function getAttributePermission(entityName: string, attributeName
  * @param roles - list of user roles
  */
 export declare function isOperationAllowed(entityName: string, operation: EntityOperationType, perms: PermissionInfo[] | undefined, roles: RoleInfo[] | undefined): boolean;
-export declare function getMaxAllowedOpPerm(entityName: string, operation: EntityOperationType, perms: PermissionInfo[]): PermissionInfo | null;
-export declare function getMaxAllowedAttrPerm(entityName: string, attributeName: string, perms: PermissionInfo[]): PermissionInfo | null;

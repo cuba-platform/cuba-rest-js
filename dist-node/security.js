@@ -56,41 +56,34 @@ function isOperationAllowed(entityName, operation, perms, roles) {
 exports.isOperationAllowed = isOperationAllowed;
 function getMaxAllowedOpPerm(entityName, operation, perms) {
     var opFqn = entityName + ":" + operation;
-    var resultPerm = null;
-    perms
+    return perms
         .filter(function (perm) { return perm.type === model_1.PermissionType.ENTITY_OP && perm.target === opFqn; })
-        .forEach(function (perm) {
+        .reduce(function (resultPerm, perm) {
         // assign result perm to maximum allowed permission between current and resultPerm
         if (resultPerm == null)
-            resultPerm = perm;
+            return perm;
         if (perm.value === 'ALLOW')
-            resultPerm = perm;
-    });
-    return resultPerm;
+            return perm;
+        return resultPerm;
+    }, null);
 }
-exports.getMaxAllowedOpPerm = getMaxAllowedOpPerm;
 function getMaxAllowedAttrPerm(entityName, attributeName, perms) {
     var attrFqn = entityName + ":" + attributeName;
-    var resultPerm = null;
-    perms
+    return perms
         .filter(function (perm) { return perm.type === model_1.PermissionType.ENTITY_ATTR && perm.target === attrFqn; })
-        .forEach(function (perm) {
-        if (resultPerm === null) {
-            resultPerm = perm;
-            // assign result perm to maximum allowed permission between current and resultPerm
-        }
-        else {
-            var resultPermValue = resultPerm.value;
-            var currentPermValue = perm.value;
-            if (currentPermValue === 'MODIFY')
-                resultPerm = perm;
-            if (currentPermValue === 'VIEW' && resultPermValue === 'DENY')
-                resultPerm = perm;
-        }
-    });
-    return resultPerm;
+        .reduce(function (resultPerm, perm) {
+        if (resultPerm === null)
+            return perm;
+        // assign result perm to maximum allowed permission between current and resultPerm
+        var resultPermValue = resultPerm.value;
+        var currentPermValue = perm.value;
+        if (currentPermValue === 'MODIFY')
+            return perm;
+        if (currentPermValue === 'VIEW' && resultPermValue === 'DENY')
+            return perm;
+        return resultPerm;
+    }, null);
 }
-exports.getMaxAllowedAttrPerm = getMaxAllowedAttrPerm;
 function hasRole(roles, roleType) {
     return roles.some(function (r) { return r.roleType === roleType; });
 }

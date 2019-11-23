@@ -37,10 +37,10 @@
   },
   "nyc": {
     "check-coverage": true,
-    "statements": 80,
-    "branches": 76,
+    "statements": 79,
+    "branches": 74,
     "functions": 69,
-    "lines": 83
+    "lines": 82
   },
   "author": "Vlad Minaev <minaev@haulmont.com>",
   "license": "Apache-2.0",
