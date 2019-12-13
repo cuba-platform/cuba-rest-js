@@ -1,3 +1,5 @@
+> :bulb: Moved to [cuba-platform/frontend/packages/cuba-rest-js](https://github.com/cuba-platform/frontend/tree/master/packages/cuba-rest-js)
+
 # CUBA REST JS
 
 [![Build Status](https://travis-ci.org/cuba-platform/cuba-rest-js.svg?branch=master)](https://travis-ci.org/cuba-platform/cuba-rest-js)
